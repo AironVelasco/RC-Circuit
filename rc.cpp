@@ -54,8 +54,8 @@ double wave::sim(double t)
 int main(int argc, char *argv[])
 {
     int counter = 0;
-    double t, amp, freq, phase, dc, speriod, sfreq, volt;
-    vector<double> voltVect;
+    double t, amp, freq, phase, dc, speriod, shperiod, sfreq, volt, volth;
+    vector<double> voltinVect, timeVect, volthVect;
     string ask;
     wave inputs[5];
     while(true)
@@ -71,13 +71,13 @@ int main(int argc, char *argv[])
       cin >> inputs[counter].dc;
       cout << "Waveform: \n(a) sin\n(b) square\n(c) triangle\n";
       cin >> inputs[counter].form;
-    
+
       cout << "Inputted Amplitude: " << inputs[counter].amp << endl;
       cout << "Inputted Frequency: " << inputs[counter].freq << endl;
       cout << "Inputted Phase: " << inputs[counter].phase << endl;
       cout << "Inputted DC Offset: " << inputs[counter].dc << endl;
       cout << "Inputted Waveform: " << inputs[counter].form << endl;
-      
+
       while(true)
       {
         cout << "Input another wave? (yes/no)\n";
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
         if (ask != "yes" && ask != "no")
           cout << "Invalid Input\n";
         else
-          break;  
+          break;
       };
       if (ask == "no")
         break;
@@ -96,20 +96,33 @@ int main(int argc, char *argv[])
       if (inputs[s].freq > sfreq)
         sfreq = inputs[s].freq;
     speriod = (1/sfreq)/16;
+    shperiod = speriod/2;
     cout << speriod << endl;
+    cout << shperiod << endl;
     cout << "For how long? (s) ";
     cin >> t;
-    for (double s = 0; s < t; s+=speriod)
+    for (double s = 0; s <= t; s+=speriod)
     {
+      timeVect.push_back(s);
       volt = 0;
+      volth= 0;
       for (int r = 0; r < 5; r++)
+      {
         volt += inputs[r].sim(s);
-      voltVect.push_back(volt);
+        volth += inputs[r].sim(s+shperiod);
+      }
+      voltinVect.push_back(volt);
+      volthVect.push_back(volth);
     }
-    
-    for (int i=0; i<voltVect.size(); i++)
-      cout << voltVect[i] << endl;
-      
+
+    for (int i=0; i<voltinVect.size(); i++)
+    {
+      cout << timeVect[i] << endl;
+      cout << voltinVect[i] << endl;
+      cout << "--HALF TIME--" << endl;
+      cout << volthVect[i] << endl;
+      cout << "-------------" << endl;
+    }
     system("PAUSE");
     return EXIT_SUCCESS;
 }
