@@ -70,8 +70,15 @@ int main(int argc, char *argv[])
       cin >> inputs[counter].phase;
       cout << "DC Offset: ";
       cin >> inputs[counter].dc;
-      cout << "Waveform: \n(a) sin\n(b) square\n(c) triangle\n";
-      cin >> inputs[counter].form;
+      while(true)
+      {
+        cout << "Waveform: \n(a) sin\n(b) square\n(c) triangle\n";
+        cin >> inputs[counter].form;
+        if (inputs[counter].form < 97 || inputs[counter].form > 99)
+          cout << "Invalid Input\n";
+        else
+          break; 
+      }
 
       cout << "Inputted Amplitude: " << inputs[counter].amp << endl;
       cout << "Inputted Frequency: " << inputs[counter].freq << endl;
@@ -112,7 +119,12 @@ int main(int argc, char *argv[])
         volt += inputs[r].sim(s);
         volth += inputs[r].sim(s+shperiod);
       }
-      cout <<s <<endl <<volt <<endl << s+shperiod <<endl << volth <<endl <<"--" << endl;
+      if (fabs(volt) < 1e-13)
+        volt = 0;
+      if (fabs(volth) < 1e-13)
+        volth = 0;
+      cout << "Full Time: " << s << endl << volt << endl; 
+      cout << "Half Time: " << s+shperiod << endl << volth <<endl << "--" << endl;
       voltinVect.push_back(volt);
       volthVect.push_back(volth);
      // cout << volth;
