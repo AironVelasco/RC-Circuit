@@ -51,17 +51,28 @@ double wave::sim(double t)
   return volt;
 }
 
+wave inputs[5];
+int counter = 0;
 
-int main(int argc, char *argv[])
+void menu()
 {
-    int counter = 0;
-    double t, amp, freq, phase, dc, speriod, shperiod, sfreq, volt, volth;
-    vector<double> voltinVect, timeVect, volthVect;
-    string ask;
-    wave inputs[5];
+  string ask = "yes";
     while(true)
     {
-      cout << "Wave "<< counter+1 << endl;
+      while(true)
+      {
+        cout << "Add/Edit Wave "<< counter+1 << "? (yes/no)\n";
+        cin >> ask;
+        if (ask != "yes" && ask != "no")
+          cout << "Invalid Input\n";
+        else
+          break;
+      }
+      if (ask == "no")
+      {
+        counter++;
+        menu();
+      }        
       cout << "Amplitude: ";
       cin >> inputs[counter].amp;
       cout << "Frequency: ";
@@ -85,10 +96,10 @@ int main(int argc, char *argv[])
       cout << "Inputted Phase: " << inputs[counter].phase << endl;
       cout << "Inputted DC Offset: " << inputs[counter].dc << endl;
       cout << "Inputted Waveform: " << inputs[counter].form << endl;
-
+      
       while(true)
       {
-        cout << "Input another wave? (yes/no)\n";
+        cout << "Do you want to edit/add more waves?\n";
         cin >> ask;
         if (ask != "yes" && ask != "no")
           cout << "Invalid Input\n";
@@ -96,9 +107,18 @@ int main(int argc, char *argv[])
           break;
       };
       if (ask == "no")
-        break;
+        return;
       counter++;
+      menu();
     };
+  return;
+};
+
+int main(int argc, char *argv[])
+{
+    double t, amp, freq, phase, dc, speriod, shperiod, sfreq, volt, volth;
+    vector<double> voltinVect, timeVect, volthVect;
+    menu();
     sfreq = inputs[0].freq;
     for (int s = 1; s < 5; s++)
       if (inputs[s].freq > sfreq)
@@ -196,7 +216,7 @@ int main(int argc, char *argv[])
     {
       saveFile << timeVect[i] <<"," <<voltinVect[i] <<"," <<voltoutVect[i] << endl;
     }
-    
+
     
     system("PAUSE");
     return EXIT_SUCCESS;
