@@ -3,6 +3,7 @@
 #include <string>
 #include <math.h>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -111,18 +112,80 @@ int main(int argc, char *argv[])
         volt += inputs[r].sim(s);
         volth += inputs[r].sim(s+shperiod);
       }
+      cout <<s <<endl <<volt <<endl << s+shperiod <<endl << volth <<endl <<"--" << endl;
       voltinVect.push_back(volt);
       volthVect.push_back(volth);
+     // cout << volth;
+    //  system("PAUSE");
     }
 
-    for (int i=0; i<voltinVect.size(); i++)
+    /*for (int i=0; i<voltinVect.size(); i++)
     {
       cout << timeVect[i] << endl;
       cout << voltinVect[i] << endl;
       cout << "--HALF TIME--" << endl;
       cout << volthVect[i] << endl;
       cout << "-------------" << endl;
+    }*/
+    cout << "Enter R";
+    double R, C;
+    cin >> R;
+    cout << "Enter C";
+    cin >> C;
+    double ReCa = R*C;
+    vector<double> voltoutVect, chargeVect;
+    chargeVect.push_back(0);
+    double K1, K2, K3, K4, a1, a2, a3, a4, weight, chargenext, sixperiod;
+    sixperiod = speriod/6;
+    for (int iter=0; iter < voltinVect.size(); iter++)
+    {
+      K1 = (voltinVect[iter]/R) - (chargeVect[iter]/ ReCa);
+      cout << "K1 = " << K1 <<endl; 
+ //     system("PAUSE");
+      a1 = chargeVect[iter] + K1*shperiod;
+      cout << "a1 = " << a1 <<endl; 
+ //     system("PAUSE");
+      K2 = volthVect[iter]/R - a1 / ReCa;
+      cout << "K2 = " << K2 <<endl; 
+//      system("PAUSE");
+      a2 = chargeVect[iter] + K2* shperiod;
+      cout << "a2 = " << a2 <<endl; 
+  //    system("PAUSE");
+      K3 = volthVect[iter]/R - chargeVect[iter]/ ReCa;
+      cout << "K3 = " << K3 << endl; 
+  //    system("PAUSE");
+      a3 = chargeVect[iter] + K3*speriod;
+      cout << "a3 = " << a3 <<endl; 
+    //  system("PAUSE");
+      K4 = voltinVect[iter+1]/R - a3/ ReCa;
+      cout << "K4 = " << K4 <<endl; 
+      //system("PAUSE");
+      weight = K1 + 2*K2 + 2*K3 + K4;
+      chargenext = chargeVect[iter] + weight * sixperiod;
+      cout << "CHARGE NEXT = " <<chargenext <<endl;
+  //    system("PAUSE");
+      cout << "Vo = " <<K1*R <<endl;
+ //     system("PAUSE");
+      chargeVect.push_back(chargenext);
+      voltoutVect.push_back(K1*R);
     }
+    
+    for (int i=0; i<voltinVect.size(); i++)
+    {
+      cout << "-------------" << endl;
+      cout << timeVect[i] << endl;
+      cout << voltinVect[i] << endl;
+      cout << voltoutVect[i] << endl;
+    }
+    
+    ofstream saveFile ("Results.csv");
+    
+    for (int i=0; i< voltinVect.size(); i++)
+    {
+      saveFile << timeVect[i] <<"," <<voltinVect[i] <<"," <<voltoutVect[i] << endl;
+    }
+    
+    
     system("PAUSE");
     return EXIT_SUCCESS;
 }
