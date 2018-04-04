@@ -107,7 +107,10 @@ void menu()
           break;
       };
       if (ask == "no")
+      {
+        counter = 0;
         return;
+      }
       counter++;
       menu();
     };
