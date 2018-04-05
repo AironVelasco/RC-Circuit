@@ -54,6 +54,35 @@ double wave::sim(double t)
 wave inputs[5];
 int counter = 0;
 
+void display()
+{
+  for (int i=0; i<5; i++)
+        {
+          cout << "----WAVE " <<i+1 <<"----" <<endl;
+          cout << "Amplitude: " <<inputs[i].amp <<endl;
+          cout << "Frequency: " <<inputs[i].freq <<endl;
+          cout << "Phase    : " <<inputs[i].phase<<endl;
+          cout << "DC Offset: " <<inputs[i].dc <<endl;
+          cout << "Wave Form: " ;
+          if (inputs[i].form == 'a')
+          {
+            cout << "Sinusoid" <<endl;
+          }
+          else if (inputs[i].form == 'b')
+          {
+            cout << "Square" <<endl;
+          }
+          else if (inputs[i].form == 'c')
+          {
+            cout << "Triangle" <<endl;
+          }
+          else
+          {
+            cout << "Uninitialized" <<endl;
+          }
+        }
+}
+
 void menu()
 {
   string ask = "yes";
@@ -61,9 +90,49 @@ void menu()
     {
       while(true)
       {
-        cout << "Add/Edit Wave "<< counter+1 << "? (yes/no)\n";
+        int flag=0;
+        while (flag == 0)
+        {
+          display();
+          cout << "Enter the Wave Number of the wave you want to edit.";
+          cout << "(If you want to start the simulation, please input \"6\") : ";
+          cin >> counter;
+          if (counter <1 || counter >6)
+          {
+            cout <<"Wrong Input!" <<endl;
+          }
+          if (counter >=1 && counter <=5)
+          {
+            cout << "Editting Wave # " <<counter << endl;
+            cout << "Amplitude: ";
+            cin >> inputs[counter-1].amp;
+            cout << "Frequency: ";
+            cin >> inputs[counter-1].freq;
+            cout << "Phase: ";
+            cin >> inputs[counter-1].phase;
+            cout << "DC Offset: ";
+            cin >> inputs[counter-1].dc;
+            while(true)
+            {
+              cout << "Waveform: \n(a) sin\n(b) square\n(c) triangle\n";
+              cin >> inputs[counter-1].form;
+              if (inputs[counter-1].form < 97 || inputs[counter].form > 99)
+                cout << "Invalid Input\n";
+              else
+                break;
+            }
+          }
+            if (counter == 6)
+            {
+              cout << "Proceeding to Simulation" << endl;
+              return;
+            }
+            system("CLS");
+        }
+      }
+        /*cout << "Add/Edit Wave "<< counter+1 << "? (yes/no)\n";
         cin >> ask;
-        if (ask != "yes" && ask != "no")
+        if (ask != "yes" && ask != "no" && ask != "simulate")
           cout << "Invalid Input\n";
         else
           break;
@@ -72,7 +141,8 @@ void menu()
       {
         counter++;
         menu();
-      }        
+      }*/
+      system("PAUSE");
       cout << "Amplitude: ";
       cin >> inputs[counter].amp;
       cout << "Frequency: ";
@@ -88,7 +158,7 @@ void menu()
         if (inputs[counter].form < 97 || inputs[counter].form > 99)
           cout << "Invalid Input\n";
         else
-          break; 
+          break;
       }
 
       cout << "Inputted Amplitude: " << inputs[counter].amp << endl;
@@ -96,12 +166,17 @@ void menu()
       cout << "Inputted Phase: " << inputs[counter].phase << endl;
       cout << "Inputted DC Offset: " << inputs[counter].dc << endl;
       cout << "Inputted Waveform: " << inputs[counter].form << endl;
-      
+
+      if (ask == "simulate")
+      {
+        cout << "Proceeding to Other Inputs..." <<endl;
+        return ;
+      }
       while(true)
       {
         cout << "Do you want to edit/add more waves?\n";
         cin >> ask;
-        if (ask != "yes" && ask != "no")
+        if (ask != "yes" && ask != "no" && ask != "simulate")
           cout << "Invalid Input\n";
         else
           break;
@@ -110,6 +185,11 @@ void menu()
       {
         counter = 0;
         return;
+      }
+      if (ask == "simulate")
+      {
+        cout << "Proceeding to Other Inputs..." <<endl;
+        return ;
       }
       counter++;
       menu();
@@ -146,7 +226,7 @@ int main(int argc, char *argv[])
         volt = 0;
       if (fabs(volth) < 1e-13)
         volth = 0;
-      cout << "Full Time: " << s << endl << volt << endl; 
+      cout << "Full Time: " << s << endl << volt << endl;
       cout << "Half Time: " << s+shperiod << endl << volth <<endl << "--" << endl;
       voltinVect.push_back(volt);
       volthVect.push_back(volth);
@@ -175,25 +255,25 @@ int main(int argc, char *argv[])
     for (int iter=0; iter < voltinVect.size(); iter++)
     {
       K1 = (voltinVect[iter]/R) - (chargeVect[iter]/ ReCa);
-      cout << "K1 = " << K1 <<endl; 
+      cout << "K1 = " << K1 <<endl;
  //     system("PAUSE");
       a1 = chargeVect[iter] + K1*shperiod;
-      cout << "a1 = " << a1 <<endl; 
+      cout << "a1 = " << a1 <<endl;
  //     system("PAUSE");
       K2 = volthVect[iter]/R - a1 / ReCa;
-      cout << "K2 = " << K2 <<endl; 
+      cout << "K2 = " << K2 <<endl;
 //      system("PAUSE");
       a2 = chargeVect[iter] + K2* shperiod;
-      cout << "a2 = " << a2 <<endl; 
+      cout << "a2 = " << a2 <<endl;
   //    system("PAUSE");
       K3 = volthVect[iter]/R - chargeVect[iter]/ ReCa;
-      cout << "K3 = " << K3 << endl; 
+      cout << "K3 = " << K3 << endl;
   //    system("PAUSE");
       a3 = chargeVect[iter] + K3*speriod;
-      cout << "a3 = " << a3 <<endl; 
+      cout << "a3 = " << a3 <<endl;
     //  system("PAUSE");
       K4 = voltinVect[iter+1]/R - a3/ ReCa;
-      cout << "K4 = " << K4 <<endl; 
+      cout << "K4 = " << K4 <<endl;
       //system("PAUSE");
       weight = K1 + 2*K2 + 2*K3 + K4;
       chargenext = chargeVect[iter] + weight * sixperiod;
@@ -204,7 +284,7 @@ int main(int argc, char *argv[])
       chargeVect.push_back(chargenext);
       voltoutVect.push_back(K1*R);
     }
-    
+
     for (int i=0; i<voltinVect.size(); i++)
     {
       cout << "-------------" << endl;
@@ -212,15 +292,15 @@ int main(int argc, char *argv[])
       cout << voltinVect[i] << endl;
       cout << voltoutVect[i] << endl;
     }
-    
+
     ofstream saveFile ("Results.csv");
-    
+
     for (int i=0; i< voltinVect.size(); i++)
     {
       saveFile << timeVect[i] <<"," <<voltinVect[i] <<"," <<voltoutVect[i] << endl;
     }
 
-    
+
     system("PAUSE");
     return EXIT_SUCCESS;
 }
