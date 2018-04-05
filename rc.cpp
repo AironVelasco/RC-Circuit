@@ -53,9 +53,12 @@ double wave::sim(double t)
 
 wave inputs[5];
 int counter = 0;
+double R, C;
 
 void display()
 {
+  cout << "Resistance : "<<R <<endl;
+  cout << "Capacitance: "<<C <<endl;
   for (int i=0; i<5; i++)
         {
           cout << "----WAVE " <<i+1 <<"----" <<endl;
@@ -92,12 +95,15 @@ void menu()
         while (flag == 0)
         {
           display();
-          cout << "Enter the Wave Number of the wave you want to edit.";
-          cout << "(If you want to start the simulation, please input \"6\") : ";
+          cout << "Enter the Wave Number of the wave you want to edit." <<endl;
+          cout << "If you want to edit resistance, please input 6. " <<endl;
+          cout << "If you want to edit capacitance, please input 7. " <<endl;
+          cout << "If you want to start the simulation, please input 8" <<endl;
+          cout << "Function: ";
           cin >> counter;
-          if (counter <1 || counter >6)
+          if (counter <1 || counter >8)
           {
-            cout <<"Wrong Input!" <<endl;
+            cout <<"Invalid Input!" <<endl;
           }
           if (counter >=1 && counter <=5)
           {
@@ -121,6 +127,32 @@ void menu()
             }
           }
             if (counter == 6)
+              {
+                while (true)
+                {
+                  cout << "Enter the Resistance Value of the Resistor: ";
+                  cin >> R;
+                  if (R >= 0)
+                    break;
+                  else
+                    cout <<"Resistances of a Resistor cannot be negative." <<endl;
+
+                }
+              }
+            if (counter == 7)
+              {
+                while (true)
+                {
+                  cout << "Enter the Capacitance Value of the Capacitor: ";
+                  cin >> C;
+                  if (C >= 0)
+                    break;
+                  else
+                    cout <<"Capacitance of a Capacitor cannot be negative." <<endl;
+
+                }
+              }
+            if (counter == 8)
             {
               cout << "Proceeding to Simulation" << endl;
               return;
@@ -159,8 +191,8 @@ int main(int argc, char *argv[])
         volt = 0;
       if (fabs(volth) < 1e-13)
         volth = 0;
-      cout << "Full Time: " << s << endl << volt << endl;
-      cout << "Half Time: " << s+shperiod << endl << volth <<endl << "--" << endl;
+   //   cout << "Full Time: " << s << endl << volt << endl;
+   //   cout << "Half Time: " << s+shperiod << endl << volth <<endl << "--" << endl;
       voltinVect.push_back(volt);
       volthVect.push_back(volth);
      // cout << volth;
@@ -175,11 +207,10 @@ int main(int argc, char *argv[])
       cout << volthVect[i] << endl;
       cout << "-------------" << endl;
     }*/
-    cout << "Enter R";
-    double R, C;
-    cin >> R;
-    cout << "Enter C";
-    cin >> C;
+  //  cout << "Enter R";
+  //  cin >> R;
+  //  cout << "Enter C";
+  //  cin >> C;
     double ReCa = R*C;
     vector<double> voltoutVect, chargeVect;
     chargeVect.push_back(0);
@@ -188,43 +219,43 @@ int main(int argc, char *argv[])
     for (int iter=0; iter < voltinVect.size(); iter++)
     {
       K1 = (voltinVect[iter]/R) - (chargeVect[iter]/ ReCa);
-      cout << "K1 = " << K1 <<endl;
+ //     cout << "K1 = " << K1 <<endl;
  //     system("PAUSE");
       a1 = chargeVect[iter] + K1*shperiod;
-      cout << "a1 = " << a1 <<endl;
+ //     cout << "a1 = " << a1 <<endl;
  //     system("PAUSE");
       K2 = volthVect[iter]/R - a1 / ReCa;
-      cout << "K2 = " << K2 <<endl;
+ //     cout << "K2 = " << K2 <<endl;
 //      system("PAUSE");
       a2 = chargeVect[iter] + K2* shperiod;
-      cout << "a2 = " << a2 <<endl;
+ //     cout << "a2 = " << a2 <<endl;
   //    system("PAUSE");
       K3 = volthVect[iter]/R - chargeVect[iter]/ ReCa;
-      cout << "K3 = " << K3 << endl;
+//      cout << "K3 = " << K3 << endl;
   //    system("PAUSE");
       a3 = chargeVect[iter] + K3*speriod;
-      cout << "a3 = " << a3 <<endl;
+  //    cout << "a3 = " << a3 <<endl;
     //  system("PAUSE");
       K4 = voltinVect[iter+1]/R - a3/ ReCa;
-      cout << "K4 = " << K4 <<endl;
+ //     cout << "K4 = " << K4 <<endl;
       //system("PAUSE");
       weight = K1 + 2*K2 + 2*K3 + K4;
       chargenext = chargeVect[iter] + weight * sixperiod;
-      cout << "CHARGE NEXT = " <<chargenext <<endl;
+  //    cout << "CHARGE NEXT = " <<chargenext <<endl;
   //    system("PAUSE");
-      cout << "Vo = " <<K1*R <<endl;
+ //     cout << "Vo = " <<K1*R <<endl;
  //     system("PAUSE");
       chargeVect.push_back(chargenext);
       voltoutVect.push_back(K1*R);
     }
 
-    for (int i=0; i<voltinVect.size(); i++)
-    {
-      cout << "-------------" << endl;
-      cout << timeVect[i] << endl;
-      cout << voltinVect[i] << endl;
-      cout << voltoutVect[i] << endl;
-    }
+ //   for (int i=0; i<voltinVect.size(); i++)
+ //   {
+ //     cout << "-------------" << endl;
+ //     cout << timeVect[i] << endl;
+ //     cout << voltinVect[i] << endl;
+ //     cout << voltoutVect[i] << endl;
+ //   }
 
     ofstream saveFile ("Results.csv");
 
@@ -233,7 +264,7 @@ int main(int argc, char *argv[])
       saveFile << timeVect[i] <<"," <<voltinVect[i] <<"," <<voltoutVect[i] << endl;
     }
 
-
+    cout << "Simulation Complete. Results can be found in \" Results.cvs \"." <<endl;
     system("PAUSE");
     return EXIT_SUCCESS;
 }
