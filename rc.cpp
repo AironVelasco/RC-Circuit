@@ -86,8 +86,6 @@ void display()
 void menu()
 {
   string ask = "yes";
-    while(true)
-    {
       while(true)
       {
         int flag=0;
@@ -130,71 +128,6 @@ void menu()
             system("CLS");
         }
       }
-        /*cout << "Add/Edit Wave "<< counter+1 << "? (yes/no)\n";
-        cin >> ask;
-        if (ask != "yes" && ask != "no" && ask != "simulate")
-          cout << "Invalid Input\n";
-        else
-          break;
-      }
-      if (ask == "no")
-      {
-        counter++;
-        menu();
-      }*/
-      system("PAUSE");
-      cout << "Amplitude: ";
-      cin >> inputs[counter].amp;
-      cout << "Frequency: ";
-      cin >> inputs[counter].freq;
-      cout << "Phase: ";
-      cin >> inputs[counter].phase;
-      cout << "DC Offset: ";
-      cin >> inputs[counter].dc;
-      while(true)
-      {
-        cout << "Waveform: \n(a) sin\n(b) square\n(c) triangle\n";
-        cin >> inputs[counter].form;
-        if (inputs[counter].form < 97 || inputs[counter].form > 99)
-          cout << "Invalid Input\n";
-        else
-          break;
-      }
-
-      cout << "Inputted Amplitude: " << inputs[counter].amp << endl;
-      cout << "Inputted Frequency: " << inputs[counter].freq << endl;
-      cout << "Inputted Phase: " << inputs[counter].phase << endl;
-      cout << "Inputted DC Offset: " << inputs[counter].dc << endl;
-      cout << "Inputted Waveform: " << inputs[counter].form << endl;
-
-      if (ask == "simulate")
-      {
-        cout << "Proceeding to Other Inputs..." <<endl;
-        return ;
-      }
-      while(true)
-      {
-        cout << "Do you want to edit/add more waves?\n";
-        cin >> ask;
-        if (ask != "yes" && ask != "no" && ask != "simulate")
-          cout << "Invalid Input\n";
-        else
-          break;
-      };
-      if (ask == "no")
-      {
-        counter = 0;
-        return;
-      }
-      if (ask == "simulate")
-      {
-        cout << "Proceeding to Other Inputs..." <<endl;
-        return ;
-      }
-      counter++;
-      menu();
-    };
-  return;
 };
 
 int main(int argc, char *argv[])
