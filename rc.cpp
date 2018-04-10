@@ -107,7 +107,7 @@ void menu()
           }
           if (counter >=1 && counter <=5)
           {
-            cout << "Editting Wave # " <<counter << endl;
+            cout << "Editing Wave # " <<counter << endl;
             cout << "Amplitude: ";
             cin >> inputs[counter-1].amp;
             cout << "Frequency: ";
