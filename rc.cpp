@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
       a2 = chargeVect[iter] + K2* shperiod;
  //     cout << "a2 = " << a2 <<endl;
   //    system("PAUSE");
-      K3 = volthVect[iter]/R - chargeVect[iter]/ ReCa;
+      K3 = volthVect[iter]/R - a2/ ReCa;
 //      cout << "K3 = " << K3 << endl;
   //    system("PAUSE");
       a3 = chargeVect[iter] + K3*speriod;
