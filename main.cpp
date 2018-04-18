@@ -222,6 +222,7 @@ void save()
       saveFile << "Uninitialized" <<endl;
     }
   }
+  saveFile <<"Time" <<"," <<"Input Voltage" <<"," << "Output Voltage" <<endl;
   for (int i=0; i< voltinVect.size(); i++)
   {
     saveFile <<timeVect[i] <<"," <<voltinVect[i] <<","<<voltoutVect[i]<< endl;
